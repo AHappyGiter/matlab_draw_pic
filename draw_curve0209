@@ -1,0 +1,34 @@
+%1 数据生成
+close all;clear;clc;
+x=linspace(0,100,1000);
+x=x.';
+y=sin(x);
+
+%2 画图并保存 
+fig_name='正弦曲线'%
+h=figure('Name',fig_name);
+fig_x=x;
+fig_y=y;%
+plot(fig_x,fig_y,'r');
+grid on;
+hold on;
+xlabel("时间/s",'fontsize',15);
+ylabel("振幅/m",'fontsize',15);
+legend('振幅','fontsize',15);%
+% xlim([formation_start_t formation_end_t]);
+y_fanwei=get(gca,'Ylim');%为图例开辟空间
+ylim([y_fanwei(1,1) 1.1*y_fanwei(1,2)]);
+saveas(h,['./',fig_name,'.png']);
+excel_filename=['./',fig_name,'数据.xlsx'];
+A=[fig_x,fig_y];
+[m,n]=size(A);
+A_cell=mat2cell(A,ones(1,m),ones(1,n));
+B_cell={'时间/s','振幅/m'};
+C_cell=[B_cell;A_cell];
+xlswrite(excel_filename,C_cell);
+
+
+%3从保存的数据读取
+close all;clear;clc;
+data_temp=xlsread('./正弦曲线数据.xlsx');
+plot(data_temp(:,1),data_temp(:,2),'r');
